@@ -2,6 +2,7 @@ export const ipcEvents = {
   WS_ADD: "wsAdd",
   WS_REMOVE: "wsRemove",
   RESULTS_UPDATE: "resultsUpdate",
+  TELEPORT_REQUEST: "teleportRequest",
   USER_LOGIN: "userLogin",
   USER_LOGOUT: "userLogout",
   SOCKET_STATE_UPDATE: "socketStateUpdate",

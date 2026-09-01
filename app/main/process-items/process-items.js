@@ -2,6 +2,7 @@ import moment from "moment";
 import NotificationsLimiter from "../notification-limiter/notification-limiter";
 import { uniqueIdGenerator } from "../../shared/utils/UniqueIdGenerator/UniqueIdGenerator";
 import * as poeTrade from "../poe-trade/poe-trade";
+import { apiHeaders } from "../api/api";
 import { ipcEvents } from "../../shared/resources/IPCEvents/IPCEvents";
 import GlobalStore from "../../shared/GlobalStore/GlobalStore";
 import { storeKeys } from "../../shared/resources/StoreKeys/StoreKeys";
@@ -59,15 +60,18 @@ const processItems = (itemIds, ws, game) => {
         let hideoutResponse = null
 
         if (isDefined(hideoutToken)) {
-          // devLog(`HideOut - ${hideoutToken}`)          
-          hideoutResponse = poeTrade.goToHideout(hideoutToken, game);  
+          // devLog(`HideOut - ${hideoutToken}`)
+          hideoutResponse = poeTrade.goToHideout(hideoutToken, game);
           whisperMessage = poeTrade.getHideoutMessage(itemDetails);
           // devLog(`OUTPUT ITEM -- ${itemDetails}`)
+          // devLog(hideoutResponse)
         } else {
           whisperMessage = poeTrade.getWhisperMessage(itemDetails);
         }
-        // devLog(`After Hideout`)   
+        // devLog(`After Hideout`)
         const price = poeTrade.getPrice(itemDetails);
+
+        // devLog(`price -- ${price}`)
 
         updateResults({
           id,
@@ -75,7 +79,9 @@ const processItems = (itemIds, ws, game) => {
           name: ws.name,
           searchUrl: ws.searchUrl,
           whisperMessage,
+          hideoutToken,
           price,
+          game,
         });
 
         if (storeUtils.isEnabled(storeKeys.SCHEDULE_RESULTS)) {

@@ -20,9 +20,11 @@ require("electron-unhandled")({
 
 let win;
 
+
 // https://stackoverflow.com/a/52195400/9599137, https://www.electron.build/configuration/nsis#guid-vs-application-name
 // => Windows 8/8.1 and 10 notifications.
 app.setAppUserModelId("com.5k-mirrors.poe-live-search-manager");
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 
 const setupDevelopmentWorkflow = () => {
   installExtension(REACT_DEVELOPER_TOOLS)

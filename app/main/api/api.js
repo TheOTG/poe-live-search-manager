@@ -22,11 +22,12 @@ const cookieHeader = () => {
   return `POESESSID=${poeSessionId}`;
 };
 
-const apiHeaders = () => {
+export const apiHeaders = () => {
   return {
     "Content-Type": "application/json",
     Cookie: cookieHeader(),
-    "User-Agent": userAgent(),
+    // "User-Agent": userAgent(),
+    "User-Agent": `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36 Edg/139.0.0.0`,
     "X-Requested-With": "XMLHttpRequest",
   };
 };
@@ -42,7 +43,7 @@ export const itemDetails = (ids, game) => {
   });
 };
 
-export const postToHideout = (hideoutToken, game) => {
+export const postToHideout = (hideoutToken, game, apiHeader) => {
   const hideoutUrl =
     game === "poe2"
       ? `${baseUrls.poe2HideoutAPI}`
@@ -54,7 +55,7 @@ export const postToHideout = (hideoutToken, game) => {
 
   return fetch(hideoutUrl, {
     method: "POST",
-    headers: apiHeaders(),
+    headers: apiHeader ? apiHeader : apiHeaders(),
     body: data,
   });
 };

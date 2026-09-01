@@ -97,10 +97,12 @@ const connect = id =>
           devLog(`SOCKET MESSAGE - ${ws.searchUrl} / ${ws.id} - ${response}`);
           const parsedResponse = JSON.parse(response);
 
-          const itemIds = safeGet(parsedResponse, ["new"]);
+          const itemIds = safeGet(parsedResponse, ["result"]);
+
+          // devLog(`itemIds -- ${itemIds}`)
 
           if (isDefined(itemIds)) {
-            processItems(itemIds, ws, game);
+            processItems([itemIds], ws, game);
           }
         });
 
@@ -126,26 +128,26 @@ const connect = id =>
 
         ws.socket.on("close", () => {
           devLog(
-            `SOCKET CLOSE - ${ws.searchUrl} / ${ws.id} ${ws.error.code} ${ws.error.reason}`
+            `SOCKET CLOSE - ${ws.searchUrl} / ${ws.id} ${ws.error?.code} ${ws.error?.reason}`
           );
 
           updateState(ws.id, ws.socket);
 
-          if (ws.error.code === 429) {
+          if (ws.error?.code === 429) {
             sendError(
               `Rate limit exceded! Closing connection for ${ws.searchUrl}. This should not happen, please open an issue.`
             );
             return;
           }
 
-          if (ws.error.code === 404) {
+          if (ws.error?.code === 404) {
             sendError(
               `Search not found. Closing connection for ${ws.searchUrl}.`
             );
             return;
           }
 
-          if (ws.error.code === 401) {
+          if (ws.error?.code === 401) {
             sendError(
               `Unauthorized. Closing connection for ${ws.searchUrl}. Check Session ID.`
             );

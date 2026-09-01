@@ -9,6 +9,15 @@ import GlobalStore from "../../../../shared/GlobalStore/GlobalStore";
 import { storeKeys } from "../../../../shared/resources/StoreKeys/StoreKeys";
 import * as tableColumns from "../../../resources/TableColumns/TableColumns";
 import { deleteAllResults as deleteAllResultsMessageBoxOptions } from "../../../resources/MessageBoxOptions/MessageBoxOptions";
+import {
+  isDefined,
+  devErrorLog,
+  devLog,
+} from "../../../../shared/utils/JavaScriptUtils/JavaScriptUtils";
+import * as poeTrade from "../../../../main/poe-trade/poe-trade";
+import soundBase64Data from "../../../../shared/resources/Audio/gong.mp3"
+
+const gong = new Audio(soundBase64Data)
 
 export default () => {
   const globalStore = GlobalStore.getInstance();
@@ -20,6 +29,9 @@ export default () => {
   const resultsLimit = globalStore.get(storeKeys.RESULTS_LIMIT, 100);
 
   function resultsUpdateListener(_, currentResults) {
+    gong.currentTime = 0
+    gong.volume = 0.3
+    gong.play()
     setResults(currentResults);
   }
 
@@ -33,6 +45,10 @@ export default () => {
       );
   }, []);
 
+  function teleport(result) {
+    ipcRenderer.send(ipcEvents.TELEPORT_REQUEST, result)
+  }
+
   function deleteResult(resultDetails) {
     const updatedResults = results.filter(
       result => result.id !== resultDetails.id
@@ -44,6 +60,8 @@ export default () => {
   }
 
   function deleteAll() {
+    // devLog(`devlog delete all`)
+    // console.log("console log delete all")
     ipcRenderer
       .invoke(ipcEvents.MESSAGE_DIALOG, deleteAllResultsMessageBoxOptions)
       .then(response => {
@@ -77,7 +95,7 @@ export default () => {
         result => ({
           icon: "file_copy",
           tooltip: "Copy whisper",
-          onClick: () => clipboard.writeText(result.whisperMessage),
+          onClick: () => teleport(result),
         }),
         result => ({
           icon: "delete",

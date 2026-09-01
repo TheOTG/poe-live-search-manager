@@ -24,6 +24,10 @@ module.exports = {
           loader: "babel-loader",
         },
       },
+      {
+        test: /\.(mp3|wav|ogg)$/,
+        type: "asset/inline"
+      },
     ],
   },
   plugins: [

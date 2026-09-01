@@ -10,6 +10,7 @@ import HttpRequestLimiter from "../http-request-limiter/http-request-limiter";
 import NotificationsLimiter from "../notification-limiter/notification-limiter";
 import stateIs from "../utils/state-is/state-is";
 import { envIs } from "../../shared/utils/JavaScriptUtils/JavaScriptUtils";
+import * as poeTrade from "../poe-trade/poe-trade";
 
 const setupDialogIpcListeners = () => {
   ipcMain.handle(ipcEvents.MESSAGE_DIALOG, (_event, args) => {
@@ -58,6 +59,10 @@ const setupWebSocketIpcListeners = () => {
   ipcMain.on(ipcEvents.RECONNECT_ALL, () => {
     webSocketActions.reconnectAll();
   });
+
+  ipcMain.on(ipcEvents.TELEPORT_REQUEST, (event, connectionDetails) => {
+    poeTrade.goToHideout(connectionDetails.hideoutToken, connectionDetails.game);
+  })
 };
 
 const setupGeneralIpcListeners = () => {
