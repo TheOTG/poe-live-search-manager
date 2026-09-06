@@ -12,7 +12,7 @@
     "dev:main": "cross-env NODE_ENV=development electron --no-sandbox --require @babel/register --require @babel/polyfill ./app/main/app.js",
     "lint": "eslint app",
     "package": "cross-env ELECTRON_BUILDER_ALLOW_UNRESOLVED_DEPENDENCIES=true node scripts/build.js",
-    "package:win": "cross-env NODE_ENV=production yarn build && electron-builder build --win --x64 --publish onTag",
+    "package:win": "cross-env NODE_ENV=production EMAIL=test@gmail.com yarn build && electron-builder build --win --x64 --publish onTag",
     "prettify": "prettier --write app/**/*.js",
     "test": "jest",
     "test:coverage": "jest --coverage"
